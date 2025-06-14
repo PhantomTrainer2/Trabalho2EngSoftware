@@ -16,5 +16,5 @@ infraestrutura).
 Além disso, o código deve evidenciar a aplicação dos princípios SOLID e conter uma cobertura
 adequada de testes unitários.
 
-### Grupo:
+### Grupo
 Breno Pinheiro Gallo de Sá (2110183), Julia Guimarães Simão (2211834), Pedro Antero Simas de Oliveira (2310970), Luiz Eduardo Manzione Raffaini (2220982) e João Victor da Silva Francisco (2220756)
