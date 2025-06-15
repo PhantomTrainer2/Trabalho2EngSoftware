@@ -1,6 +1,6 @@
 from flask import Flask
 from infra.db.database import init_db
-from app.routes.task_routes import produto_bp
+from Perfeccionista.app.routes.produto_routes import produto_bp
 
 def create_app():
     app = Flask(__name__)

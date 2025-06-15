@@ -1,5 +1,3 @@
-# domain/produto.py
-
 from abc import ABC, abstractmethod
 
 # Classe base abstrata para todos os produtos

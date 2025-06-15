@@ -1,4 +1,3 @@
-import sqlite3
 from domain.fornecedor import Fornecedor
 from domain.fornecedor_repository import FornecedorRepository
 from infra.db.database import get_connection

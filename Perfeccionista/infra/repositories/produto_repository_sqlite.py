@@ -1,9 +1,7 @@
-# infra/repositories/produto_repository_sqlite.py
-
 import sqlite3
 from typing import List
 from domain.produto import Produto, Garrafa, Lata, Engradado
-from domain.repositories.produto_repository import ProdutoRepositoryInterface
+from domain.produto_repository import ProdutoRepositoryInterface
 
 # Mapeamento de tipo para classe para facilitar a criação de objetos
 TIPO_CLASSE_MAP = {

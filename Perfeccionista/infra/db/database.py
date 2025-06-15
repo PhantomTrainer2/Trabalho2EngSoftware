@@ -19,7 +19,7 @@ def criar_banco_de_dados():
             );
         """)
 
-        # Cria tabela de produtos com FK para fornecedor
+        # Cria tabela de produtos
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS produtos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,6 +35,5 @@ def criar_banco_de_dados():
 
 
 if __name__ == '__main__':
-    # Este bloco permite que o script seja executado diretamente do terminal
-    # para inicializar o banco de dados.
+    #Inicializar o banco de dados.
     criar_banco_de_dados()

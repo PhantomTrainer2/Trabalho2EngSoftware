@@ -1,5 +1,3 @@
-# domain/repositories/produto_repository.py
-
 from abc import ABC, abstractmethod
 from typing import List
 from domain.produto import Produto
