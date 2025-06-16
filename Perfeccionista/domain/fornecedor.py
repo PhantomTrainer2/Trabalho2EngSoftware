@@ -6,3 +6,7 @@ class Fornecedor:
 
     def __repr__(self):
         return f"<Fornecedor {self.nome} ({self.id})>"
+
+    def atualizar_dados(self, nome: str, contato: str):
+        self.nome = nome
+        self.contato = contato
