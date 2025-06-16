@@ -18,3 +18,13 @@ class ProdutoRepositoryInterface(ABC):
     def remover(self, produto_id: int) -> None:
         """Remove um produto do estoque pelo seu ID."""
         pass
+
+    @abstractmethod
+    def buscar_por_id(self, produto_id: int) -> Produto:
+        """Busca um produto pelo ID."""
+        pass
+
+    @abstractmethod
+    def atualizar(self, produto: Produto) -> None:
+        """Atualiza os dados de um produto existente."""
+        pass
