@@ -53,3 +53,16 @@ class AtualizarEstoqueUseCase:
             raise ValueError("Operação inválida. Use 'entrada' ou 'saida'.")
 
         self.produto_repo.atualizar(produto)
+
+
+class AtualizarProdutoUseCase:
+    def __init__(self, produto_repo: ProdutoRepositoryInterface):
+        self.produto_repo = produto_repo
+
+    def execute(self, produto_id: int, novo_nome: str, nova_descricao: str, novo_fornecedor_id: int = None) -> None:
+        produto = self.produto_repo.buscar_por_id(produto_id)
+        if not produto:
+            raise ValueError("Produto não encontrado.")
+
+        produto.atualizar_dados(novo_nome, nova_descricao, novo_fornecedor_id)
+        self.produto_repo.atualizar(produto)
