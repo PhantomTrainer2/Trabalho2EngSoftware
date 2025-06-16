@@ -16,9 +16,13 @@ class Produto(ABC):
         pass
 
     def adicionar_estoque(self, quantidade: int):
+        if quantidade <= 0:
+            raise ValueError("Quantidade deve ser positiva.")
         self.quantidade += quantidade
 
     def remover_estoque(self, quantidade: int):
+        if quantidade <= 0:
+            raise ValueError("Quantidade deve ser positiva.")
         if quantidade > self.quantidade:
             raise ValueError("Estoque insuficiente.")
         self.quantidade -= quantidade
