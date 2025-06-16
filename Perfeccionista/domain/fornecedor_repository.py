@@ -9,3 +9,8 @@ class FornecedorRepository(ABC):
 
     @abstractmethod
     def buscar_por_id(self, id): pass
+
+    @abstractmethod
+    def remover(self, fornecedor_id: int) -> None:
+        """Remove um fornecedor pelo ID."""
+        pass
