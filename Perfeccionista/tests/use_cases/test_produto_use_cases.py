@@ -86,3 +86,32 @@ def test_remover_produto_inexistente():
 
     with pytest.raises(ValueError, match="Produto não encontrado"):
         use_case.execute(777)
+
+
+def test_listar_todos_produtos():
+    repo = FakeProdutoRepository()
+    repo.salvar(Lata(id=1, nome="Lata", descricao="350ml", quantidade=5))
+    repo.salvar(Engradado(id=2, nome="Caixa", descricao="12 unidades", quantidade=10))
+
+    produtos = repo.listar_todos()
+    assert len(produtos) == 2
+    nomes = [p.nome for p in produtos]
+    assert "Lata" in nomes
+    assert "Caixa" in nomes
+
+
+def test_buscar_produto_por_id():
+    repo = FakeProdutoRepository()
+    produto = Garrafa(id=5, nome="Garrafa", descricao="2L", quantidade=20)
+    repo.salvar(produto)
+
+    buscado = repo.buscar_por_id(5)
+    assert buscado is not None
+    assert buscado.nome == "Garrafa"
+    assert buscado.descricao == "2L"
+    assert buscado.quantidade == 20
+
+
+def test_buscar_produto_por_id_inexistente():
+    repo = FakeProdutoRepository()
+    assert repo.buscar_por_id(999) is None
