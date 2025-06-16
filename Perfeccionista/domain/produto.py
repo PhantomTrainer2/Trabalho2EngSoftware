@@ -15,6 +15,11 @@ class Produto(ABC):
         """Propriedade abstrata para retornar o tipo do produto."""
         pass
 
+    def atualizar_dados(self, nome: str, descricao: str, fornecedor_id: int = None):
+        self.nome = nome
+        self.descricao = descricao
+        self.fornecedor_id = fornecedor_id
+
     def adicionar_estoque(self, quantidade: int):
         if quantidade <= 0:
             raise ValueError("Quantidade deve ser positiva.")
