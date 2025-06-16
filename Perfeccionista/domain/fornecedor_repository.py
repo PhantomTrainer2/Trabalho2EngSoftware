@@ -14,3 +14,8 @@ class FornecedorRepository(ABC):
     def remover(self, fornecedor_id: int) -> None:
         """Remove um fornecedor pelo ID."""
         pass
+
+    @abstractmethod
+    def atualizar(self, fornecedor: Fornecedor) -> None:
+        """Atualiza os dados de um fornecedor existente."""
+        pass
