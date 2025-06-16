@@ -25,3 +25,11 @@ class BuscarFornecedorPorIdUseCase:
 
     def execute(self, id: int) -> Optional[Fornecedor]:
         return self.fornecedor_repo.buscar_por_id(id)
+
+
+class RemoverFornecedorUseCase:
+    def __init__(self, fornecedor_repo: FornecedorRepository):
+        self.fornecedor_repo = fornecedor_repo
+
+    def execute(self, fornecedor_id: int) -> None:
+        self.fornecedor_repo.remover(fornecedor_id)
