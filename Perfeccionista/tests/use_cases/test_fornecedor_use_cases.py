@@ -75,3 +75,31 @@ def test_remover_fornecedor_inexistente():
 
     with pytest.raises(ValueError, match="Fornecedor não encontrado"):
         use_case.execute(123)
+
+
+def test_listar_todos_fornecedores():
+    repo = FakeFornecedorRepository()
+    repo.salvar(Fornecedor(id=1, nome="F1", contato="1"))
+    repo.salvar(Fornecedor(id=2, nome="F2", contato="2"))
+
+    fornecedores = repo.listar_todos()
+    assert len(fornecedores) == 2
+    nomes = [f.nome for f in fornecedores]
+    assert "F1" in nomes
+    assert "F2" in nomes
+
+
+def test_buscar_fornecedor_por_id():
+    repo = FakeFornecedorRepository()
+    fornecedor = Fornecedor(id=10, nome="F10", contato="(00) 0000-0000")
+    repo.salvar(fornecedor)
+
+    buscado = repo.buscar_por_id(10)
+    assert buscado is not None
+    assert buscado.nome == "F10"
+    assert buscado.contato == "(00) 0000-0000"
+
+
+def test_buscar_fornecedor_por_id_inexistente():
+    repo = FakeFornecedorRepository()
+    assert repo.buscar_por_id(999) is None
