@@ -15,6 +15,14 @@ class Produto(ABC):
         """Propriedade abstrata para retornar o tipo do produto."""
         pass
 
+    def adicionar_estoque(self, quantidade: int):
+        self.quantidade += quantidade
+
+    def remover_estoque(self, quantidade: int):
+        if quantidade > self.quantidade:
+            raise ValueError("Estoque insuficiente.")
+        self.quantidade -= quantidade
+
 # Classes concretas que herdam de Produto
 class Garrafa(Produto):
     @property
