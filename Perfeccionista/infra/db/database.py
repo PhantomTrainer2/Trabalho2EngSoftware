@@ -25,6 +25,7 @@ def criar_banco_de_dados():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL,
                 tipo TEXT NOT NULL,
+                descricao TEXT NOT NULL,
                 quantidade INTEGER NOT NULL,
                 fornecedor_id INTEGER,
                 FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id)
