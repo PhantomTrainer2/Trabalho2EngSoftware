@@ -58,3 +58,23 @@ class ProdutoRepositorySQLite(ProdutoRepositoryInterface):
         cursor.execute("DELETE FROM produtos WHERE id = ?", (produto_id,))
 
         conn.commit()
+        
+    def buscar_por_id(self, produto_id: int) -> Produto:
+        conn = self._get_conexao()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome, descricao, quantidade, tipo FROM produtos WHERE id = ?", (produto_id,))
+        linha = cursor.fetchone()
+        conn.close()
+        if linha:
+            return self._mapear_linha_para_objeto(linha)
+        return None
+
+    def atualizar(self, produto: Produto) -> None:
+        conn = self._get_conexao()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE produtos SET nome = ?, descricao = ?, quantidade = ?, tipo = ?, fornecedor_id = ? WHERE id = ?",
+            (produto.nome, produto.descricao, produto.quantidade, produto.tipo, produto.fornecedor_id, produto.id)
+        )
+        conn.commit()
+        conn.close()

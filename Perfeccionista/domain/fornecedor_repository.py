@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from domain.fornecedor import Fornecedor
 
 class FornecedorRepository(ABC):
     @abstractmethod
@@ -10,12 +11,4 @@ class FornecedorRepository(ABC):
     @abstractmethod
     def buscar_por_id(self, id): pass
 
-    @abstractmethod
-    def remover(self, fornecedor_id: int) -> None:
-        """Remove um fornecedor pelo ID."""
-        pass
 
-    @abstractmethod
-    def atualizar(self, fornecedor: Fornecedor) -> None:
-        """Atualiza os dados de um fornecedor existente."""
-        pass

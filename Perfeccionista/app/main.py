@@ -1,14 +1,14 @@
 from flask import Flask
-from infra.db.database import init_db
-from Perfeccionista.app.routes.produto_routes import produto_bp
-from Perfeccionista.app.routes.produto_routes import fornecedor_bp
+from infra.db.database import criar_banco_de_dados
+from app.routes.produto_routes import produto_bp
+from app.routes.fornecedor_routes import fornecedor_bp
 
 def create_app():
     app = Flask(__name__)
     app.register_blueprint(produto_bp)
     app.register_blueprint(fornecedor_bp)
     
-    init_db()  # Inicializa/cria o banco se não existir
+    criar_banco_de_dados()
     
     return app
 
