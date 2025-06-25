@@ -54,5 +54,9 @@ export function useFornecedores() {
     fetchFornecedores()
   }, [])
 
-  return { fornecedores, loading, createFornecedor, updateFornecedor, deleteFornecedor }
+  const getFornecedorById = (id: number): Fornecedor | undefined => {
+    return fornecedores.find(f => f.id === id)
+  }
+
+  return { fornecedores, loading, createFornecedor, updateFornecedor, deleteFornecedor, getFornecedorById }
 }

@@ -4,6 +4,7 @@ import { Package, Pencil, Trash2 } from 'lucide-react'
 import Table from '../../components/Table'
 import GenericModal, { FieldConfig } from '../../components/GenericModal'
 import { useProdutos } from '../../hooks/useProdutos'
+import { useFornecedores } from '../../hooks/useFornecedores'
 
 export interface Produto {
   id: number
@@ -35,6 +36,7 @@ const {
   updateProduto,
   deleteProduto
 } = useProdutos()
+  const {fornecedores, getFornecedorById} = useFornecedores()
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<Produto | null>(null)
 
@@ -142,7 +144,7 @@ const {
               </td>
               <td className="px-4 py-3">{prod.id}</td>
               <td className="px-4 py-3">{prod.descricao}</td>
-              <td className="px-4 py-3">{prod.fornecedor_id}</td>
+              <td className="px-4 py-3">{getFornecedorById(prod.fornecedor_id).nome}</td>
               <td className="px-4 py-3">{prod.tipo}</td>
               <td className="px-4 py-3">{prod.quantidade}</td>
               <td className="px-4 py-3">
