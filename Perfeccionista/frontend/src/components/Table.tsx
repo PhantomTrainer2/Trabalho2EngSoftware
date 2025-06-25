@@ -23,9 +23,7 @@ export default function Table<T>({
 
   return (
     <div className="space-y-4 w-full">
-      {/* Container da tabela com cantos arredondados */}
       <div className="rounded-lg shadow border border-gray-200 bg-white overflow-hidden flex flex-col">
-        {/* Tabela com scroll horizontal */}
         <div className="overflow-x-auto">
           <table className="w-full table-fixed text-sm text-left">
             <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
@@ -50,7 +48,6 @@ export default function Table<T>({
           </table>
         </div>
 
-        {/* Paginação fixa embaixo */}
         {totalPages > 1 && (
           <div className="flex justify-center py-4">
             <nav className="flex items-center gap-2">

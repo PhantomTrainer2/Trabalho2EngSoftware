@@ -51,7 +51,6 @@ export default function GenericModal(props: GenericModalProps) {
   const modalContent = (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl mx-4 md:mx-0 overflow-hidden">
-        {/* Header */}
         <div className="flex justify-between items-center px-6 py-3 border-b">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button onClick={onClose} className="p-1 text-gray-500 hover:text-gray-700">
@@ -59,7 +58,6 @@ export default function GenericModal(props: GenericModalProps) {
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
           <div className={`grid gap-4 ${fields.length > 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
             {fields.map((f) => {
@@ -121,7 +119,6 @@ export default function GenericModal(props: GenericModalProps) {
             })}
           </div>
 
-          {/* Footer */}
           <div className="flex justify-end gap-3 pt-4 ">
             {footer ?? (
               <>

@@ -3,16 +3,17 @@ import { useEffect, useState } from 'react'
 import { Package, Pencil, Trash2 } from 'lucide-react'
 import Table from '../../components/Table'
 import GenericModal, { FieldConfig } from '../../components/GenericModal'
+import { useProdutos } from '../../hooks/useProdutos'
 
-interface Produto {
-  id: string
+export interface Produto {
+  id: number
   nome: string
-  identificador: string
   descricao: string
-  tipo: 'Engradado' | 'Lata' | 'Garrafa'
-  fornecedor: string
+  tipo: string
   quantidade: number
+  fornecedor_id: number
 }
+
 
 const productFields: FieldConfig[] = [
   { name: 'nome', label: 'Nome do Produto', type: 'text', required: true },
@@ -27,31 +28,18 @@ const productFields: FieldConfig[] = [
 ]
 
 export default function ProdutosPage() {
-  const [produtos, setProdutos] = useState<Produto[]>([])
+const {
+  produtos,
+  loading,
+  createProduto,
+  updateProduto,
+  deleteProduto
+} = useProdutos()
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<Produto | null>(null)
 
-  // Estados para confirmação de delete
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [toDelete, setToDelete] = useState<Produto | null>(null)
-
-  useEffect(() => {
-    // mock inicial
-    const tipos = ['Engradado', 'Lata', 'Garrafa'] as const
-    const mock = Array(28)
-      .fill(0)
-      .map((_, i) => ({
-        id: String(i + 1),
-        nome: ['Câmera Digital', 'Smartwatch', 'Perfume'][i % 3],
-        identificador: `PRD-${(i + 1).toString().padStart(3, '0')}`,
-        descricao: 'Caixa plástica de 20L com tampa e alças laterais',
-        tipo: tipos[i % 3],
-        fornecedor: 'Distribuidora Alfa',
-        quantidade: [20, 30, 40, 45][i % 4],
-      }))
-    setProdutos(mock)
-    console.log('Mock de produtos inicializado:', mock)
-  }, [])
 
   function openCreateModal() {
     setEditing(null)
@@ -68,30 +56,29 @@ export default function ProdutosPage() {
     setConfirmOpen(true)
   }
 
-  function handleSave(data: Record<string, any>) {
+  async function handleSave(data: Record<string, any>) {
     if (editing) {
-      setProdutos((prev) =>
-        prev.map((p) => (p.id === editing.id ? { ...p, ...data } : p))
-      )
+      const { id, ...rest } = editing;
+      await updateProduto(Number(id), {
+        ...rest,
+        ...data
+      })
     } else {
-      const nextId = produtos.length + 1
-      const newProd: Produto = {
-        id: String(nextId),
-        identificador: `PRD-${nextId.toString().padStart(3, '0')}`,
+      const newProd: Omit<Produto, 'id'> = {
         nome: data.nome,
         descricao: data.descricao,
-        fornecedor: data.fornecedor,
-        tipo: data.tipo || 'Engradado',
+        fornecedor_id: Number(data.fornecedor),
+        tipo: data.tipo || 'engradado',
         quantidade: Number(data.quantidade),
       }
-      setProdutos((prev) => [newProd, ...prev])
+      await createProduto(newProd)
     }
     setModalOpen(false)
   }
 
-  function handleDeleteConfirmed() {
+  async function handleDeleteConfirmed() {
     if (toDelete) {
-      setProdutos((prev) => prev.filter((p) => p.id !== toDelete.id))
+      await deleteProduto(Number(toDelete.id))
       if (editing?.id === toDelete.id) setModalOpen(false)
     }
     setConfirmOpen(false)
@@ -153,9 +140,9 @@ export default function ProdutosPage() {
                 </div>
                 {prod.nome}
               </td>
-              <td className="px-4 py-3">{prod.identificador}</td>
+              <td className="px-4 py-3">{prod.id}</td>
               <td className="px-4 py-3">{prod.descricao}</td>
-              <td className="px-4 py-3">{prod.fornecedor}</td>
+              <td className="px-4 py-3">{prod.fornecedor_id}</td>
               <td className="px-4 py-3">{prod.tipo}</td>
               <td className="px-4 py-3">{prod.quantidade}</td>
               <td className="px-4 py-3">
@@ -184,9 +171,10 @@ export default function ProdutosPage() {
           editing
             ? {
                 nome: editing.nome,
-                fornecedor: editing.fornecedor,
+                fornecedor: editing.fornecedor_id,
                 descricao: editing.descricao,
                 quantidade: editing.quantidade,
+                tipo: editing.tipo.toLowerCase(),
               }
             : {}
         }

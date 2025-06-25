@@ -5,7 +5,6 @@ import clsx from 'clsx'
 export default function Sidebar({ open, setOpen }: { open: boolean; setOpen: (v: boolean) => void }) {
   return (
     <>
-      {/* Sidebar */}
       <aside
         className={clsx(
           'fixed md:static top-0 left-0 z-40 h-full w-64 bg-white border-r shadow-md p-4 transform transition-transform duration-300 ease-in-out',

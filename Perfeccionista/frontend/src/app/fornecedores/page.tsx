@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useFornecedores } from '../../hooks/useFornecedores'
 import { Truck, Edit3, Trash2 } from 'lucide-react'
 import Table from '../../components/Table'
 import GenericModal, { FieldConfig } from '../../components/GenericModal'
 
-interface Fornecedor {
-  id: string
-  empresa: string
+export interface Fornecedor {
+  id: number
+  nome: string
   contato: string
 }
 
@@ -17,21 +18,20 @@ const supplierFields: FieldConfig[] = [
 ]
 
 export default function FornecedoresPage() {
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([])
+  const {
+    fornecedores,
+    loading,
+    createFornecedor,
+    updateFornecedor,
+    deleteFornecedor,
+  } = useFornecedores()
+
   const [modalOpen,    setModalOpen]    = useState(false)
   const [editing,      setEditing]      = useState<Fornecedor|null>(null)
 
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [toDelete,    setToDelete]    = useState<Fornecedor|null>(null)
 
-  useEffect(() => {
-    const mock: Fornecedor[] = Array(12).fill(0).map((_, i) => ({
-      id:      String(i + 1),
-      empresa: `TechGear Inc.`,
-      contato: `2199087${6023 + i}`,
-    }))
-    setFornecedores(mock)
-  }, [])
 
   function openCreateModal() {
     setEditing(null)
@@ -48,32 +48,25 @@ export default function FornecedoresPage() {
     setConfirmOpen(true)
   }
 
-  function handleSave(data: Record<string, any>) {
+  async function handleSave(data: Record<string, any>) {
     if (editing) {
       // atualizar existente
-      setFornecedores((prev) =>
-        prev.map((f) =>
-          f.id === editing.id
-            ? { ...f, empresa: data.empresa, contato: data.contato }
-            : f
-        )
-      )
+      await updateFornecedor(Number(editing.id), data)
+
     } else {
       // criar novo
-      const nextId = fornecedores.length + 1
-      const newSup: Fornecedor = {
-        id: String(nextId),
-        empresa:  data.empresa,
+      const newSup: Omit<Fornecedor, 'id'> = {
+        nome:  data.nome,
         contato:  data.contato,
       }
-      setFornecedores((prev) => [newSup, ...prev])
+      await createFornecedor(newSup)
     }
     setModalOpen(false)
   }
 
-  function handleDeleteConfirmed() {
+  async function handleDeleteConfirmed() {
     if (toDelete) {
-      setFornecedores((prev) => prev.filter((f) => f.id !== toDelete.id))
+      await deleteFornecedor(Number(toDelete.id))
       if (editing?.id === toDelete.id) setModalOpen(false)
     }
     setConfirmOpen(false)
@@ -116,7 +109,7 @@ export default function FornecedoresPage() {
               <div className="bg-orange-100 p-1 rounded">
                 <Truck className="text-orange-600" size={16} />
               </div>
-              {f.empresa}
+              {f.nome}
             </td>
             <td className="px-4 py-3">{f.contato}</td>
             <td className="px-4 py-3 flex gap-2">
@@ -137,7 +130,7 @@ export default function FornecedoresPage() {
         fields={supplierFields}
         initialData={
           editing
-            ? { empresa: editing.empresa, contato: editing.contato }
+            ? { empresa: editing.nome, contato: editing.contato }
             : {}
         }
         onClose={() => setModalOpen(false)}
@@ -199,7 +192,7 @@ export default function FornecedoresPage() {
       >
         <p className="py-4 text-center">
           Deseja realmente excluir o fornecedor{' '}
-          <strong>{toDelete?.empresa}</strong>?
+          <strong>{toDelete?.nome}</strong>?
         </p>
       </GenericModal>
     </section>

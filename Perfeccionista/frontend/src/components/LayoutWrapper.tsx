@@ -9,7 +9,6 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
     return (
         <div className="h-screen relative flex flex-col md:flex-row">
-            {/* Película: só no mobile quando sidebar estiver aberta */}
             {sidebarOpen && (
                 <div
                     className="fixed inset-0 z-30 bg-black/50 md:hidden"
