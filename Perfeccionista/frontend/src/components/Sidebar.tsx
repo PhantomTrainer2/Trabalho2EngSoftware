@@ -25,9 +25,6 @@ export default function Sidebar({ open, setOpen }: { open: boolean; setOpen: (v:
           <Link href="/" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm" onClick={() => setOpen(false)}>
             <Home size={18} /> Dashboard
           </Link>
-          <Link href="/produtos" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm" onClick={() => setOpen(false)}>
-            <Package size={18} /> Produtos
-          </Link>
           <Link href="/estoque" className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 text-sm" onClick={() => setOpen(false)}>
             <Warehouse size={18} /> Estoque
           </Link>
