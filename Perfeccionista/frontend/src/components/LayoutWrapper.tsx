@@ -20,7 +20,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
             <div className="flex-1 flex flex-col relative z-10">
                 <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-                <main className="flex-1 p-4">{children}</main>
+                <main className="flex-1 overflow-y-auto p-6 bg-gray-100">
+                  {children}
+                </main>
             </div>
         </div>
     )

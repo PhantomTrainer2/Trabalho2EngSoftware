@@ -9,6 +9,7 @@ interface Produto {
   nome: string
   identificador: string
   descricao: string
+  tipo: 'Engradado' | 'Lata' | 'Garrafa'
   fornecedor: string
   quantidade: number
 }
@@ -18,6 +19,11 @@ const productFields: FieldConfig[] = [
   { name: 'fornecedor', label: 'Identificador do Fornecedor', type: 'text' },
   { name: 'descricao', label: 'Descrição', type: 'textarea' },
   { name: 'quantidade', label: 'Quantidade', type: 'number', required: true },
+  { name: 'tipo', label: 'Tipo', type: 'select', options: [
+      { label: 'Engradado', value: 'engradado' },
+      { label: 'Lata', value: 'lata' },
+      { label: 'Garrafa', value: 'garrafa' },
+    ] }
 ]
 
 export default function ProdutosPage() {
@@ -31,6 +37,7 @@ export default function ProdutosPage() {
 
   useEffect(() => {
     // mock inicial
+    const tipos = ['Engradado', 'Lata', 'Garrafa'] as const
     const mock = Array(28)
       .fill(0)
       .map((_, i) => ({
@@ -38,10 +45,12 @@ export default function ProdutosPage() {
         nome: ['Câmera Digital', 'Smartwatch', 'Perfume'][i % 3],
         identificador: `PRD-${(i + 1).toString().padStart(3, '0')}`,
         descricao: 'Caixa plástica de 20L com tampa e alças laterais',
+        tipo: tipos[i % 3],
         fornecedor: 'Distribuidora Alfa',
         quantidade: [20, 30, 40, 45][i % 4],
       }))
     setProdutos(mock)
+    console.log('Mock de produtos inicializado:', mock)
   }, [])
 
   function openCreateModal() {
@@ -72,6 +81,7 @@ export default function ProdutosPage() {
         nome: data.nome,
         descricao: data.descricao,
         fornecedor: data.fornecedor,
+        tipo: data.tipo || 'Engradado',
         quantidade: Number(data.quantidade),
       }
       setProdutos((prev) => [newProd, ...prev])
@@ -121,6 +131,7 @@ export default function ProdutosPage() {
           'Identificador',
           'Descrição',
           'Fornecedor',
+          'Tipo',
           'Quantidade',
           'Status',
           'Ação',
@@ -145,6 +156,7 @@ export default function ProdutosPage() {
               <td className="px-4 py-3">{prod.identificador}</td>
               <td className="px-4 py-3">{prod.descricao}</td>
               <td className="px-4 py-3">{prod.fornecedor}</td>
+              <td className="px-4 py-3">{prod.tipo}</td>
               <td className="px-4 py-3">{prod.quantidade}</td>
               <td className="px-4 py-3">
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${status.color}`}>
