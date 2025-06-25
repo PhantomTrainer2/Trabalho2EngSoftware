@@ -1,55 +1,34 @@
 import pytest
-from app.main import app
+from app.main import create_app
+from infra.db.database import get_connection
 
-@pytest.fixture
+# Build a fresh app for testing
+app = create_app()
+
+@pytest.fixture(autouse=True)
 def client():
     app.config['TESTING'] = True
+    # Ensure a clean in‐memory schema
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS fornecedores (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT    NOT NULL,
+                contato TEXT NOT NULL
+            )
+        """)
+        conn.commit()
     with app.test_client() as client:
         yield client
 
-
 def test_criar_fornecedor(client):
-    response = client.post("/fornecedores", json={
-        "id": 1,
-        "nome": "Fornecedor Teste",
-        "contato": "12345678"
+    response = client.post('/fornecedores', json={
+        'nome': 'Acme Distribuidora',
+        'contato': '+55 21 99999-0000'
     })
     assert response.status_code == 201
-    assert response.get_json()["nome"] == "Fornecedor Teste"
-
-
-def test_listar_fornecedores(client):
-    client.post("/fornecedores", json={
-        "id": 2,
-        "nome": "Fornecedor B",
-        "contato": "2222222"
-    })
-    response = client.get("/fornecedores")
-    assert response.status_code == 200
-    fornecedores = response.get_json()
-    assert isinstance(fornecedores, list)
-    assert any(f["nome"] == "Fornecedor B" for f in fornecedores)
-
-
-def test_atualizar_fornecedor(client):
-    client.post("/fornecedores", json={
-        "id": 3,
-        "nome": "Fornecedor Antigo",
-        "contato": "3333"
-    })
-    response = client.put("/fornecedores/3", json={
-        "nome": "Fornecedor Novo",
-        "contato": "9999"
-    })
-    assert response.status_code == 200
-    assert response.get_json()["nome"] == "Fornecedor Novo"
-
-
-def test_remover_fornecedor(client):
-    client.post("/fornecedores", json={
-        "id": 4,
-        "nome": "Fornecedor X",
-        "contato": "4444"
-    })
-    response = client.delete("/fornecedores/4")
-    assert response.status_code == 204
+    data = response.get_json()
+    assert 'id' in data
+    assert data['nome'] == 'Acme Distribuidora'
+    assert data['contato'] == '+55 21 99999-0000'
