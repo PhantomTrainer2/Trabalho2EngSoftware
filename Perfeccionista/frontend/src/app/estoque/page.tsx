@@ -13,7 +13,6 @@ interface Produto {
   quantidade: number
 }
 
-// Campos do formulário de criação/edição
 const productFields: FieldConfig[] = [
   { name: 'nome', label: 'Nome do Produto', type: 'text', required: true },
   { name: 'fornecedor', label: 'Identificador do Fornecedor', type: 'text' },
@@ -62,12 +61,10 @@ export default function ProdutosPage() {
 
   function handleSave(data: Record<string, any>) {
     if (editing) {
-      // edição
       setProdutos((prev) =>
         prev.map((p) => (p.id === editing.id ? { ...p, ...data } : p))
       )
     } else {
-      // criação
       const nextId = produtos.length + 1
       const newProd: Produto = {
         id: String(nextId),
@@ -85,7 +82,6 @@ export default function ProdutosPage() {
   function handleDeleteConfirmed() {
     if (toDelete) {
       setProdutos((prev) => prev.filter((p) => p.id !== toDelete.id))
-      // fecha modais caso estivesse editando esse item
       if (editing?.id === toDelete.id) setModalOpen(false)
     }
     setConfirmOpen(false)
@@ -94,7 +90,6 @@ export default function ProdutosPage() {
 
   return (
     <section className="p-4">
-      {/* Card de Total */}
       <div className="bg-white shadow rounded-lg p-4 flex items-center justify-between">
         <div>
           <p className="text-sm text-gray-500">Total de Produtos</p>
@@ -105,7 +100,6 @@ export default function ProdutosPage() {
         </div>
       </div>
 
-      {/* Cabeçalho + botão */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-lg font-semibold mt-4">Inventário de produtos</h1>
@@ -121,7 +115,6 @@ export default function ProdutosPage() {
         </button>
       </div>
 
-      {/* Tabela */}
       <Table<Produto>
         columns={[
           'Produto',
@@ -171,7 +164,6 @@ export default function ProdutosPage() {
         }}
       />
 
-      {/* Modal de criação/edição */}
       <GenericModal
         isOpen={modalOpen}
         title={editing ? 'Editar Produto' : 'Adicionar Produto'}
@@ -219,11 +211,9 @@ export default function ProdutosPage() {
         }
       />
 
-      {/* Modal de confirmação de exclusão */}
       <GenericModal
         isOpen={confirmOpen}
         title="Confirmar Exclusão"
-        // não passamos fields, vai usar body customizado
         fields={[]}
         initialData={{}}
         onClose={() => setConfirmOpen(false)}
