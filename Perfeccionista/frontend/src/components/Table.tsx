@@ -6,6 +6,7 @@ interface TableProps<T> {
   columns: string[]
   data: T[]
   renderRow: (item: T) => ReactNode
+  /** Quantos itens por página (fixo) */
   itemsPerPage?: number
 }
 
@@ -13,7 +14,7 @@ export default function Table<T>({
   columns,
   data,
   renderRow,
-  itemsPerPage = 6,
+  itemsPerPage = 4
 }: TableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1)
   const totalPages = Math.ceil(data.length / itemsPerPage)
@@ -21,15 +22,21 @@ export default function Table<T>({
   const paginatedData = data.slice(start, start + itemsPerPage)
 
   return (
-    <div className="space-y-4">
-      {/* Caixa branca com tabela e paginação */}
-      <div className="rounded-lg shadow overflow-hidden border border-gray-200 bg-white">
+    <div className="space-y-4 w-full">
+      {/* Container da tabela com cantos arredondados */}
+      <div className="rounded-lg shadow border border-gray-200 bg-white overflow-hidden flex flex-col">
+        {/* Tabela com scroll horizontal */}
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+          <table className="w-full table-fixed text-sm text-left">
             <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
               <tr>
-                {columns.map((col, index) => (
-                  <th key={index} className="px-4 py-3 whitespace-nowrap text-start">{col}</th>
+                {columns.map((col, i) => (
+                  <th
+                    key={i}
+                    className="px-4 py-3 whitespace-nowrap"
+                  >
+                    {col}
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -43,43 +50,42 @@ export default function Table<T>({
           </table>
         </div>
 
-        {/* Paginação dentro da caixa branca */}
+        {/* Paginação fixa embaixo */}
         {totalPages > 1 && (
-  <div className="flex justify-center py-4">
-    <nav className="flex items-center gap-2">
-      <button
-        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-        className="text-gray-500 hover:text-black disabled:opacity-40"
-      >
-        ‹
-      </button>
+          <div className="flex justify-center py-4">
+            <nav className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="text-gray-500 hover:text-black disabled:opacity-40"
+              >
+                ‹
+              </button>
 
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
-            page === currentPage
-              ? 'bg-blue-100 text-blue-700 font-semibold'
-              : 'text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          {page}
-        </button>
-      ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
+                    page === currentPage
+                      ? 'bg-blue-100 text-blue-700 font-semibold'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
 
-      <button
-        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-        className="text-gray-500 hover:text-black disabled:opacity-40"
-      >
-        ›
-      </button>
-    </nav>
-  </div>
-)}
-
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="text-gray-500 hover:text-black disabled:opacity-40"
+              >
+                ›
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   )
